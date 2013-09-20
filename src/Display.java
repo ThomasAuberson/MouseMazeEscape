@@ -10,7 +10,7 @@ import javax.swing.*;
  * Java Maze Escape
  * 
  * Author: Thomas Auberson
- * Version: 0.3b
+ * Version: 0.3c
  * 
  * This class controls a JFrame window with a single JPanel canvas display
  */
@@ -18,7 +18,7 @@ import javax.swing.*;
 public class Display extends JPanel implements Runnable {
 
 	// FIELDS
-	private String version = "0.3b";
+	private String version = "0.3c";
 	private JFrame frame;
 	private MenuBar menu;
 	private ArrayList<Score> scores = new ArrayList<Score>();
@@ -140,7 +140,7 @@ public class Display extends JPanel implements Runnable {
 
 	public void quitToMenu() {
 		paused = true;
-		int n = JOptionPane.showConfirmDialog(null,
+		int n = JOptionPane.showConfirmDialog(this,
 				"Are you sure you want to quit to main menu?", "Game Paused",
 				JOptionPane.YES_NO_OPTION);
 		if (n == JOptionPane.YES_OPTION) {
@@ -186,13 +186,13 @@ public class Display extends JPanel implements Runnable {
 	public void startLevel() {
 		maze = mazeGenerator.generateMaze(new Dimension(nextMazeSize,
 				nextMazeSize), tileSize);
-		character.startGame(maze, directions[2]);
+		character.startLevel(maze, directions[2]);
 		time = 0;
 		seconds = START_TIME + (TIME_INCREASE * (currentLevel - 1));
 	}
 
 	public void endGame() {
-		String s = JOptionPane.showInputDialog(null,
+		String s = JOptionPane.showInputDialog(this,
 				"<html>Game Over!<br>Your final score was: " + score
 						+ "<br>Type a name to submit your score:</html>",
 				"Game Over", JOptionPane.PLAIN_MESSAGE);
@@ -269,7 +269,7 @@ public class Display extends JPanel implements Runnable {
 		} else if (button.equals("About")) {
 			JOptionPane
 					.showMessageDialog(
-							null,
+							this,
 							"<HTML>Mouse Maze Escape<br>Version: "
 									+ version
 									+ "<br>Author: Thomas Auberson<br><br>You are a MOUSE!<br>You are in a MAZE!!<br>You must ESCAPE!!!</HTML>",
@@ -284,13 +284,13 @@ public class Display extends JPanel implements Runnable {
 						+ scores.get(i).getScore() + " - " + scores.get(i).getName();
 				index++;
 			}
-			JOptionPane.showMessageDialog(null, "<HTML>High Scores:"
+			JOptionPane.showMessageDialog(this, "<HTML>High Scores:"
 					+ scoreString + "</HTML>", "High Scores",
 					JOptionPane.PLAIN_MESSAGE);
 		} else if (button.equals("How to Play")) {
 			JOptionPane
 					.showMessageDialog(
-							null,
+							this,
 							"<HTML>- You must reach the end of each maze, (represented<br>  by a red tile) before the time runs out to<br>  progress to the next level.<br>- The mazes get bigger (and ergo harder) with each level!<br>- Use the arrow keys UP, DOWN, LEFT, RIGHT to<br>  manuevre through the maze.<br>- Use SPACE to jump over walls! This uses jump points.<br>  You earn additional jump points as your score increases.<br>- Use ESC to pause the game or quit back to the main menu.</HTML>",
 							"How to Play", JOptionPane.PLAIN_MESSAGE);
 		}
@@ -334,8 +334,8 @@ public class Display extends JPanel implements Runnable {
 			g.drawString("Timer: " + seconds, TIMER_X, Y_GAP);
 			g.drawString("Level: " + currentLevel, LEVEL_X, Y_GAP);
 			g.drawString("Score: " + score, LEVEL_X, Y_GAP * 2);
-			g.drawString("Lives: " + lives, TIMER_X, 2 * Y_GAP);
-			g.drawString("Jumps: " + jump, TIMER_X, Y_GAP * 3);
+			//g.drawString("Lives: " + lives, TIMER_X, 2 * Y_GAP);
+			g.drawString("Jumps: " + jump, TIMER_X, Y_GAP * 2);
 		}
 	}
 
@@ -368,7 +368,7 @@ public class Display extends JPanel implements Runnable {
 				seconds = 0;
 				if (lives >= 1) {
 					lives--;
-					JOptionPane.showMessageDialog(null,
+					JOptionPane.showMessageDialog(this,
 							"<html>You have run out of time!<br>You now have "
 									+ lives + " lives left.", "Level Failed",
 							JOptionPane.PLAIN_MESSAGE);
@@ -384,7 +384,7 @@ public class Display extends JPanel implements Runnable {
 				seconds = 0;
 				if (lives >= 1) {
 					lives--;
-					JOptionPane.showMessageDialog(null,
+					JOptionPane.showMessageDialog(this,
 							"<html>You landed on the wall!<br>You now have "
 									+ lives + " lives left.", "Level Failed",
 							JOptionPane.PLAIN_MESSAGE);
@@ -399,7 +399,7 @@ public class Display extends JPanel implements Runnable {
 				int timeBonus = seconds;
 				score += (currentLevel * (50 + timeBonus) + 50);
 				exp += (currentLevel * (50 + timeBonus) + 50);
-				JOptionPane.showMessageDialog(null,
+				JOptionPane.showMessageDialog(this,
 						"<html>You have completed level " + currentLevel
 								+ "!<br>You earned a time bonus of: "
 								+ timeBonus * currentLevel
@@ -410,12 +410,12 @@ public class Display extends JPanel implements Runnable {
 				if ((currentLevel % 5) == 0) {
 					JOptionPane
 							.showMessageDialog(
-									null,
+									this,
 									"<html>Congratulations on making it past level "
 											+ currentLevel
 											+ "<br>You have earned an additional life!</html>",
 									"Gained a Life", JOptionPane.PLAIN_MESSAGE);
-					lives++;
+					//lives++;
 				}
 				character.isAtEnd = false;
 				currentLevel++;

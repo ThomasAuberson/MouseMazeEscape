@@ -39,7 +39,8 @@ public class Character {
 		// setBounds(sc.x, sc.y, ts, ts);
 	}
 
-	public void startGame(Maze m, Direction f) {
+	public void startLevel(Maze m, Direction f) {
+		isMoving = false;
 		facing = f;
 		maze = m;
 		coords = maze.getStart();
